@@ -1,0 +1,602 @@
+<Window x:Class="AMWindowsAssistant.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="AM Windows Assistant"
+        Width="1120"
+        Height="760"
+        MinWidth="850"
+        MinHeight="650"
+        WindowStartupLocation="CenterScreen"
+        Background="#F3F6FB"
+        FontFamily="Segoe UI"
+        Icon="/Assets/AM.png"
+        Loaded="Window_Loaded">
+    <Window.Resources>
+        <SolidColorBrush x:Key="InkBrush" Color="#17243A" />
+        <SolidColorBrush x:Key="MutedBrush" Color="#66758B" />
+        <SolidColorBrush x:Key="AccentBrush" Color="#1769E0" />
+
+        <Style x:Key="PrimaryButton" TargetType="Button">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="20,12" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.88" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.45" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+            <Setter Property="Foreground" Value="#24415F" />
+            <Setter Property="Background" Value="#EAF0F8" />
+        </Style>
+        <Style x:Key="NavButton" TargetType="Button">
+            <Setter Property="Foreground" Value="#AAB8CC" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="15,12" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="NavBorder"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="NavBorder" Property="Background" Value="#23344D" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="NavBorder" Property="Opacity" Value="0.5" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="244" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Background="#111D30">
+            <Grid Margin="20,24,20,20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="28" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Ellipse Width="42" Height="42">
+                        <Ellipse.Fill>
+                            <ImageBrush ImageSource="/Assets/AM.png" Stretch="UniformToFill" />
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <TextBlock Text="AM Assistant"
+                               Margin="12,0,0,0"
+                               Foreground="White"
+                               FontSize="15"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+
+                <TextBlock Grid.Row="2"
+                           Text="WORKSPACE"
+                           Margin="8,0,0,10"
+                           Foreground="#70819A"
+                           FontSize="10"
+                           FontWeight="Bold" />
+
+                <StackPanel Grid.Row="3">
+                    <Button x:Name="HomeNavButton"
+                            Content="  Home"
+                            Style="{StaticResource NavButton}"
+                            Background="#1B6FE5"
+                            Foreground="White"
+                            Click="HomeNav_Click" />
+                    <Button x:Name="TermsNavButton"
+                            Content="  Terms of Service"
+                            Margin="0,6,0,0"
+                            Style="{StaticResource NavButton}"
+                            Click="TermsNav_Click" />
+                    <Button x:Name="PrivacyNavButton"
+                            Content="  Privacy"
+                            Margin="0,6,0,0"
+                            Style="{StaticResource NavButton}"
+                            Click="PrivacyNav_Click" />
+                    <Button x:Name="AboutNavButton"
+                            Content="  About"
+                            Margin="0,6,0,0"
+                            Style="{StaticResource NavButton}"
+                            Click="AboutNav_Click" />
+                    <Button x:Name="CheckUpdatesButton"
+                            Content="  Check for updates"
+                            Margin="0,16,0,0"
+                            Style="{StaticResource NavButton}"
+                            Click="CheckUpdates_Click" />
+                </StackPanel>
+
+                <StackPanel Grid.Row="4" Margin="8,0,0,0">
+                    <Border Height="1" Background="#2A3A51" Margin="0,0,0,14" />
+                    <TextBlock Text="AM Windows Assistant"
+                               Foreground="#AAB8CC"
+                               FontSize="12"
+                               FontWeight="SemiBold" />
+                    <TextBlock Text="A simple Windows setup helper"
+                               Margin="0,4,0,0"
+                               Foreground="#70819A"
+                               FontSize="11" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="72" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" Background="White" BorderBrush="#E6EBF2" BorderThickness="0,0,0,1">
+                <Grid Margin="30,0">
+                    <TextBlock Text="Windows 11 setup"
+                               Foreground="#31435B"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center" />
+                    <Border HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Padding="11,6"
+                            Background="#EFF5FF"
+                            CornerRadius="14">
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Width="7" Height="7" Fill="#22A06B" VerticalAlignment="Center" />
+                            <TextBlock Text="  Ready when you are"
+                                       Foreground="#41648C"
+                                       FontSize="11"
+                                       FontWeight="Medium" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <Grid x:Name="PageHost" Grid.Row="1" ClipToBounds="True">
+                <ScrollViewer x:Name="HomePage" VerticalScrollBarVisibility="Auto">
+                    <StackPanel MaxWidth="790" Margin="38,32,38,34">
+                        <TextBlock Text="Windows 11, at a glance."
+                                   Foreground="{StaticResource InkBrush}"
+                                   FontSize="30"
+                                   FontWeight="Bold"
+                                   TextWrapping="Wrap" />
+                        <TextBlock Text="Choose a local installation image or get one directly from Microsoft."
+                                   Margin="0,8,0,24"
+                                   Foreground="{StaticResource MutedBrush}"
+                                   FontSize="14"
+                                   TextWrapping="Wrap" />
+
+                        <Border Background="White" CornerRadius="14" Padding="23"
+                                BorderBrush="#E3E9F1" BorderThickness="1">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Width="30" Height="30" CornerRadius="15" Background="#EAF2FF">
+                                        <TextBlock Text="1"
+                                                   Foreground="#1769E0"
+                                                   FontWeight="Bold"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center" />
+                                    </Border>
+                                    <StackPanel Margin="12,0,0,0" VerticalAlignment="Center">
+                                        <TextBlock Text="Choose your Windows 11 ISO"
+                                                   Foreground="{StaticResource InkBrush}"
+                                                   FontSize="16"
+                                                   FontWeight="SemiBold" />
+                                        <TextBlock Text="Select an ISO file already saved on this PC."
+                                                   Margin="0,3,0,0"
+                                                   Foreground="{StaticResource MutedBrush}"
+                                                   FontSize="13" />
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <Border Margin="0,18,0,14"
+                                        Padding="14,12"
+                                        Background="#F6F8FB"
+                                        BorderBrush="#E7ECF3"
+                                        BorderThickness="1"
+                                        CornerRadius="8">
+                                    <TextBlock x:Name="SelectedIsoText"
+                                               Text="No ISO selected"
+                                               Foreground="#66758B"
+                                               FontSize="13"
+                                               TextTrimming="CharacterEllipsis"
+                                               ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}" />
+                                </Border>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <Button x:Name="SelectIsoButton"
+                                            Content="Choose ISO"
+                                            Style="{StaticResource SecondaryButton}"
+                                            Click="SelectIso_Click" />
+                                    <Button x:Name="MountIsoButton"
+                                            Content="Mount ISO"
+                                            Margin="10,0,0,0"
+                                            Style="{StaticResource PrimaryButton}"
+                                            IsEnabled="False"
+                                            Click="MountIso_Click" />
+                                </StackPanel>
+                                <ProgressBar x:Name="MountProgressBar"
+                                             Height="4"
+                                             Margin="0,16,0,0"
+                                             IsIndeterminate="True"
+                                             Foreground="#1769E0"
+                                             Visibility="Collapsed" />
+                            </StackPanel>
+                        </Border>
+
+                        <Border Margin="0,14,0,0" Background="White" CornerRadius="14" Padding="23"
+                                BorderBrush="#E3E9F1" BorderThickness="1">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border Width="30" Height="30" CornerRadius="15" Background="#EAF2FF">
+                                            <TextBlock Text="2"
+                                                       Foreground="#1769E0"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center" />
+                                        </Border>
+                                        <TextBlock Text="Start Windows Setup"
+                                                   Margin="12,0,0,0"
+                                                   Foreground="{StaticResource InkBrush}"
+                                                   FontSize="16"
+                                                   FontWeight="SemiBold"
+                                                   VerticalAlignment="Center" />
+                                    </StackPanel>
+                                    <TextBlock x:Name="StatusText"
+                                               Text="Mount an ISO to find its setup program."
+                                               Margin="42,7,18,0"
+                                               Foreground="{StaticResource MutedBrush}"
+                                               FontSize="13"
+                                               TextWrapping="Wrap" />
+                                </StackPanel>
+                                <Button x:Name="StartSetupButton"
+                                        Grid.Column="1"
+                                        Content="Start setup"
+                                        Style="{StaticResource PrimaryButton}"
+                                        IsEnabled="False"
+                                        VerticalAlignment="Center"
+                                        Click="StartSetup_Click" />
+                            </Grid>
+                        </Border>
+
+                        <Border Margin="0,15,0,0" Padding="18" Background="#EAF2FF" CornerRadius="10">
+                            <StackPanel>
+                                <TextBlock Text="Don’t have an ISO?"
+                                           Foreground="#23456F"
+                                           FontSize="14"
+                                           FontWeight="SemiBold" />
+                                <TextBlock Text="Open Microsoft’s official Windows 11 download page."
+                                           Margin="0,4,0,12"
+                                           Foreground="#536B88"
+                                           FontSize="13"
+                                           TextWrapping="Wrap" />
+                                <Button Content="Get Windows 11 from Microsoft"
+                                        HorizontalAlignment="Left"
+                                        Style="{StaticResource SecondaryButton}"
+                                        Click="Download_Click" />
+                            </StackPanel>
+                        </Border>
+
+                        <TextBlock Text="Compatibility mode attempts to bypass some Windows 11 hardware checks, such as TPM or processor checks. Setup may still fail, and compatibility or future updates are not guaranteed. Back up important files before upgrading. This app does not create bootable USB media."
+                                   Margin="2,16,2,0"
+                                   Foreground="#78879A"
+                                   FontSize="12"
+                                   TextWrapping="Wrap" />
+                    </StackPanel>
+                </ScrollViewer>
+
+                <ScrollViewer x:Name="TermsPage"
+                              Visibility="Collapsed"
+                              VerticalScrollBarVisibility="Auto">
+                    <StackPanel MaxWidth="790" Margin="38,32,38,34">
+                        <TextBlock Text="Terms of Service"
+                                   Foreground="{StaticResource InkBrush}"
+                                   FontSize="30"
+                                   FontWeight="Bold" />
+                        <TextBlock Text="Please read this plain-language summary before using the assistant."
+                                   Margin="0,8,0,24"
+                                   Foreground="{StaticResource MutedBrush}"
+                                   FontSize="14"
+                                   TextWrapping="Wrap" />
+
+                        <Border Background="White" CornerRadius="14" Padding="24"
+                                BorderBrush="#E3E9F1" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="What this app does"
+                                           Foreground="{StaticResource InkBrush}"
+                                           FontSize="16"
+                                           FontWeight="SemiBold" />
+                                <TextBlock Text="AM Windows Assistant helps you choose a Windows 11 ISO, mount it using Windows, and launch its setup program in compatibility mode after confirmation. It is a convenience launcher, not a Windows installer."
+                                           Margin="0,8,0,0"
+                                           Foreground="{StaticResource MutedBrush}"
+                                           FontSize="13"
+                                           TextWrapping="Wrap" />
+
+                                <TextBlock Text="Your responsibilities"
+                                           Margin="0,22,0,0"
+                                           Foreground="{StaticResource InkBrush}"
+                                           FontSize="16"
+                                           FontWeight="SemiBold" />
+                                <TextBlock Text="Use installation media and Windows software that you are authorized to use, save your work, and back up important files before running Setup. Compatibility mode may bypass some hardware checks, but installation can still fail, and device compatibility or future updates are not guaranteed."
+                                           Margin="0,8,0,0"
+                                           Foreground="{StaticResource MutedBrush}"
+                                           FontSize="13"
+                                           TextWrapping="Wrap" />
+
+                                <TextBlock Text="Third-party software"
+                                           Margin="0,22,0,0"
+                                           Foreground="{StaticResource InkBrush}"
+                                           FontSize="16"
+                                           FontWeight="SemiBold" />
+                                <TextBlock Text="Windows, Windows Setup, and Microsoft’s download website are provided by Microsoft and are subject to Microsoft’s own terms, licenses, and policies. AM Windows Assistant is not affiliated with or endorsed by Microsoft."
+                                           Margin="0,8,0,0"
+                                           Foreground="{StaticResource MutedBrush}"
+                                           FontSize="13"
+                                           TextWrapping="Wrap" />
+
+                                <TextBlock Text="App updates"
+                                           Margin="0,22,0,0"
+                                           Foreground="{StaticResource InkBrush}"
+                                           FontSize="16"
+                                           FontWeight="SemiBold" />
+                                <TextBlock Text="When you choose Check for updates, the app contacts the GitHub repository you configure. If a newer release is available, the app asks before downloading and replacing its executable."
+                                           Margin="0,8,0,0"
+                                           Foreground="{StaticResource MutedBrush}"
+                                           FontSize="13"
+                                           TextWrapping="Wrap" />
+
+                                <TextBlock Text="No guarantee"
+                                           Margin="0,22,0,0"
+                                           Foreground="{StaticResource InkBrush}"
+                                           FontSize="16"
+                                           FontWeight="SemiBold" />
+                                <TextBlock Text="Operating-system upgrades can fail, restart your device, or affect apps and files. Use the official Windows Setup instructions and proceed only when you are ready."
+                                           Margin="0,8,0,0"
+                                           Foreground="{StaticResource MutedBrush}"
+                                           FontSize="13"
+                                           TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+
+                        <TextBlock Text="These are starter terms for this project, not legal advice. Have them reviewed for your needs before distributing the app."
+                                   Margin="4,16,4,0"
+                                   Foreground="#78879A"
+                                   FontSize="12"
+                                   TextWrapping="Wrap" />
+                    </StackPanel>
+                </ScrollViewer>
+
+                <ScrollViewer x:Name="PrivacyPage"
+                              Visibility="Collapsed"
+                              VerticalScrollBarVisibility="Auto">
+                    <StackPanel MaxWidth="790" Margin="38,32,38,34">
+                        <TextBlock Text="Privacy"
+                                   Foreground="{StaticResource InkBrush}"
+                                   FontSize="30"
+                                   FontWeight="Bold" />
+                        <TextBlock Text="A clear summary of the information this app handles."
+                                   Margin="0,8,0,24"
+                                   Foreground="{StaticResource MutedBrush}"
+                                   FontSize="14"
+                                   TextWrapping="Wrap" />
+
+                        <Border Background="White" CornerRadius="14" Padding="24"
+                                BorderBrush="#E3E9F1" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="Information used locally"
+                                           Foreground="{StaticResource InkBrush}"
+                                           FontSize="16"
+                                           FontWeight="SemiBold" />
+                                <TextBlock Text="The ISO path you select is held in the app while it is open. When you mount an ISO, the app starts Windows PowerShell with administrator approval to mount it and temporarily writes the resulting drive letter to a local temporary file, which it deletes when the operation finishes."
+                                           Margin="0,8,0,0"
+                                           Foreground="{StaticResource MutedBrush}"
+                                           FontSize="13"
+                                           TextWrapping="Wrap" />
+
+                                <TextBlock Text="No built-in account or analytics"
+                                           Margin="0,22,0,0"
+                                           Foreground="{StaticResource InkBrush}"
+                                           FontSize="16"
+                                           FontWeight="SemiBold" />
+                                <TextBlock Text="This app has no sign-in or telemetry. Update checks and downloads happen only when you start them; the app does not send the selected ISO or its path to the app developer."
+                                           Margin="0,8,0,0"
+                                           Foreground="{StaticResource MutedBrush}"
+                                           FontSize="13"
+                                           TextWrapping="Wrap" />
+
+                                <TextBlock Text="External services"
+                                           Margin="0,22,0,0"
+                                           Foreground="{StaticResource InkBrush}"
+                                           FontSize="16"
+                                           FontWeight="SemiBold" />
+                                <TextBlock Text="If you check for updates, the app contacts the GitHub repository you configured and downloads its release executable if you approve an update. GitHub receives the request and your network address under its own policies. The repository name is saved locally. The Microsoft download link opens in your browser, and Windows Setup may handle information under Microsoft’s own privacy policies."
+                                           Margin="0,8,0,0"
+                                           Foreground="{StaticResource MutedBrush}"
+                                           FontSize="13"
+                                           TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <ScrollViewer x:Name="AboutPage"
+                              Visibility="Collapsed"
+                              VerticalScrollBarVisibility="Auto">
+                    <StackPanel MaxWidth="790" Margin="38,32,38,34">
+                        <TextBlock Text="About"
+                                   Foreground="{StaticResource InkBrush}"
+                                   FontSize="30"
+                                   FontWeight="Bold" />
+                        <TextBlock Text="A lightweight helper for getting to official Windows Setup."
+                                   Margin="0,8,0,24"
+                                   Foreground="{StaticResource MutedBrush}"
+                                   FontSize="14"
+                                   TextWrapping="Wrap" />
+
+                        <Border Background="White" CornerRadius="14" Padding="28"
+                                BorderBrush="#E3E9F1" BorderThickness="1">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Ellipse Width="88" Height="88">
+                                        <Ellipse.Fill>
+                                            <ImageBrush ImageSource="/Assets/AM.png" Stretch="UniformToFill" />
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                    <StackPanel Margin="17,0,0,0" VerticalAlignment="Center">
+                                        <TextBlock Text="AM Windows Assistant"
+                                                   Foreground="{StaticResource InkBrush}"
+                                                   FontSize="18"
+                                                   FontWeight="Bold" />
+                                        <TextBlock x:Name="AppVersionText"
+                                                   Text="Version 1.0.0"
+                                                   Margin="0,4,0,0"
+                                                   Foreground="{StaticResource MutedBrush}"
+                                                   FontSize="13" />
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <TextBlock Text="The assistant is intended for people attempting Windows 11 setup on PCs that fail some hardware checks, such as TPM or processor checks. After confirmation, it launches Setup in compatibility mode. This cannot guarantee installation, app or driver compatibility, or future updates."
+                                           Margin="0,24,0,0"
+                                           Foreground="{StaticResource MutedBrush}"
+                                           FontSize="14"
+                                           TextWrapping="Wrap" />
+                                <TextBlock Text="The AM and four-pane window mark are original app artwork. Windows is a Microsoft product; this app is independent and is not affiliated with Microsoft."
+                                           Margin="0,14,0,0"
+                                           Foreground="{StaticResource MutedBrush}"
+                                           FontSize="13"
+                                           TextWrapping="Wrap" />
+
+                                <Border Margin="0,24,0,0"
+                                        Padding="18"
+                                        Background="#F6F8FB"
+                                        BorderBrush="#E7ECF3"
+                                        BorderThickness="1"
+                                        CornerRadius="10">
+                                    <StackPanel>
+                                        <TextBlock Text="App updates"
+                                                   Foreground="{StaticResource InkBrush}"
+                                                   FontSize="15"
+                                                   FontWeight="SemiBold" />
+                                        <TextBlock Text="Enter the public GitHub owner/repository. Releases need version tags, an AMWindowsAssistant.exe asset, and a GitHub SHA-256 digest."
+                                                   Margin="0,5,0,12"
+                                                   Foreground="{StaticResource MutedBrush}"
+                                                   FontSize="12"
+                                                   TextWrapping="Wrap" />
+                                        <DockPanel>
+                                            <Button Content="Save"
+                                                    DockPanel.Dock="Right"
+                                                    Margin="10,0,0,0"
+                                                    Padding="16,10"
+                                                    Style="{StaticResource SecondaryButton}"
+                                                    Click="SaveUpdateRepository_Click" />
+                                            <TextBox x:Name="UpdateRepositoryTextBox"
+                                                     MinHeight="38"
+                                                     Padding="10,8"
+                                                     VerticalContentAlignment="Center"
+                                                     FontSize="13"
+                                                     ToolTip="owner/repository" />
+                                        </DockPanel>
+                                        <TextBlock x:Name="UpdateConfigStatusText"
+                                                   Text="No update repository configured."
+                                                   Margin="0,9,0,0"
+                                                   Foreground="{StaticResource MutedBrush}"
+                                                   FontSize="12"
+                                                   TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+
+        <Grid x:Name="StartupOverlay"
+              Grid.ColumnSpan="2"
+              Panel.ZIndex="10"
+              Background="#0E1A2B">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Grid Width="150" Height="150">
+                    <Ellipse Stroke="#263951" StrokeThickness="3" />
+                    <Ellipse Stroke="#68B6FF"
+                             StrokeThickness="3"
+                             StrokeDashArray="1.2,3.8"
+                             RenderTransformOrigin="0.5,0.5">
+                        <Ellipse.RenderTransform>
+                            <RotateTransform x:Name="LoaderRotation" />
+                        </Ellipse.RenderTransform>
+                    </Ellipse>
+                    <Ellipse Width="112" Height="112"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center">
+                        <Ellipse.Fill>
+                            <ImageBrush ImageSource="/Assets/AM.png" Stretch="UniformToFill" />
+                        </Ellipse.Fill>
+                    </Ellipse>
+                </Grid>
+                <TextBlock Text="AM WINDOWS ASSISTANT"
+                           Margin="0,25,0,0"
+                           Foreground="#AAB8CC"
+                           FontSize="12"
+                           FontWeight="SemiBold"
+                           HorizontalAlignment="Center" />
+                <TextBlock Text="Getting things ready"
+                           Margin="0,8,0,0"
+                           Foreground="White"
+                           FontSize="16"
+                           FontWeight="Medium"
+                           HorizontalAlignment="Center" />
+                <ProgressBar Width="184"
+                             Height="3"
+                             Margin="0,20,0,0"
+                             IsIndeterminate="True"
+                             Foreground="#68B6FF" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
